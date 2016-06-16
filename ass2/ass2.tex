@@ -1,0 +1,137 @@
+\documentclass[11pt]{article}
+
+\usepackage{hyperref}
+\usepackage{subfig}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{float}
+
+% Must be loaded after most (read: a shit load incl. hyperref) usepackages.
+\usepackage[noabbrev]{cleveref}
+
+\title{Discrete optimization, assignment 2}
+\author{
+    Henrik Bendt --- gwk553 \\
+    Jens Fredskov --- chw752 \\
+    Jacob Grevald --- xst295
+}                                        
+\date{October 30, 2014}
+
+\begin{document}
+\maketitle
+
+\stepcounter{section} % count the section
+\section*{Theoretical part --- randomized rounding}
+
+We have not been able to solve the theoretical part. We discussed using the same
+procedure as Vazirani, but we ran into trouble:
+
+The $\log n$ approximation factor comes from the fact that we take the
+union of $c \log n$ independent assignments, but if we remove the
+dependence on $n$ then we cannot limit it by $\frac{1}{4n}$ as they do.
+This means that when we sum over $\frac{n}{2}$ elements we end up with
+a probability for coverage of half the elements that are dependent on
+$n$.
+
+On the other hand if the number of independent assignment do depend on $n$ then
+we get an approximation factor depending on $n$ when using Markov's inequality.
+
+So we cannot seem to get both using their procedure, and we did not find another
+solution to the problem.
+
+\stepcounter{section} % count the section
+\section*{Implementation part --- approximation}
+
+\subsection{}
+For this part we have used the handed out code to solve the instances. As
+predicted by the assignment text the solution can only solve the first three,
+and does not seem to terminate (runs for more that 15 minutes
+at the very least) on the last. The results of the handed out OPL program can be
+seen in \Cref{fig:opl-results}.
+
+\begin{figure}[H]
+    \centering
+    \begin{tabular}{lll}
+        \toprule
+        Instance & Objective value & Running time ($\mu$s) \\
+        \midrule
+        scpa3       & 232     & 85    \\
+        scpc3       & 243     & 164   \\
+        scpnrf1     & 14      & 2808  \\
+        scpnrg5     & ---     & ---   \\
+        \bottomrule
+    \end{tabular}
+    \caption{Exact solutions using CPLEX}\label{fig:opl-results}
+\end{figure}
+
+\subsection{}
+We have implemented the approximation algorithms Simple Rounding and Random Rounding from Vazirani. The compilation and how to run the program follows from the README file in 2.3.
+
+As we have not completed the theoretical question, we cannot relate it.
+Here are the results from the algorithms.
+\begin{figure}[H]
+    \centering
+    \begin{tabular}{lll}
+        \toprule
+        Instance & Approximated value & Running time ($\mu$s) \\
+        \midrule
+        scpa3       & 457     & 80    \\
+        scpc3       & 587     & 146   \\
+        scpnrf1     & 78      & 875   \\
+        scpnrg5     & 621     & 600   \\
+        \bottomrule
+    \end{tabular}
+    \caption{Found values and running times for the Simple rounding algorithm on the given instances}\label{fig:simpleround}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{tabular}{lll}
+        \toprule
+        Instance & Approximated value & Running time ($\mu$s) \\
+        \midrule
+        scpa3       & 366     & 1818    \\
+        scpc3       & 408     & 2291    \\
+        scpnrf1     & 25      & 7877    \\
+        scpnrg5     & 419     & 11462   \\
+        \bottomrule
+    \end{tabular}
+    \caption{Found values and running times for the Random rounding algorithm on the given instances.}\label{fig:randomround}
+\end{figure}
+
+
+\subsection{}
+We have implemented the approximation algorithm from Vazirani that uses the
+Primal-dual schema. See the README file for information on compilation and how
+to run the program. Our own results are listed in \Cref{fig:c-results}.
+
+\begin{figure}[H]
+    \centering
+    \begin{tabular}{llll}
+        \toprule
+        Instance & Approximate cost &
+		Total time ($\mu$s) & Algorithm time ($\mu$s) \\
+        \midrule
+        scpa3       & 448     & ~2100     & ~70    \\
+        scpc3       & 463     & ~3700     & ~120   \\
+        scpnrf1     & 43      & ~42000    & ~1000  \\
+        scpnrg5     & 412     & ~21000    & ~530   \\
+        \bottomrule
+    \end{tabular}
+    \caption{Times are approximate and are only meant to give an idea of the
+	effectiveness and of the scale between total and algorithm time, and scale
+	between the different instances.}\label{fig:c-results}
+\end{figure}
+
+We measure the total running time, and the running time of the core algorithm.
+Almost all of the time is used on
+parsing the input, which accounts for the large difference. Note that the
+approximate cost of this algorithm depends on the order of the input.
+
+\subsection{}
+We choose the primal-dual algorithm from 2.3 as our candidate. It should
+terminate much faster than 5 minutes even for very large instances and it gives
+quite good results, though an iterative method would utilize the allowed time
+and probably be better.
+
+\end{document}

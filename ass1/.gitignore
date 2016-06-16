@@ -1,0 +1,10 @@
+*
+!.gitignore
+!assignment1.pdf
+!ass1.tex
+!src/
+!src/*
+!opl/
+!opl/*
+!opl/ass1/
+!opl/ass1/*
